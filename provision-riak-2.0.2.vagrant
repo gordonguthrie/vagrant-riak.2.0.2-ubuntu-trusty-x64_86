@@ -1,0 +1,94 @@
+#!/bin/bash
+
+## Try and make the bash work safely
+# Terminate on unitiialised variables
+set -u
+# Terminate on error
+set -e
+# Terminate if any part of a pipeline fails
+set -o pipefail
+
+# Uncomment for debugging
+set -x
+
+## Define the global variables
+readonly LOGFILE="/root/vagrant.provision.log"
+readonly ERLANG_URL="http://s3.amazonaws.com/downloads.basho.com/erlang/otp_src_R16B02-basho5.tar.gz"
+readonly RIAK_URL="http://s3.amazonaws.com/downloads.basho.com/riak/2.0/2.0.2/riak-2.0.2.tar.gz"
+
+function should_provision_fn () {
+    if [ -f  "/var/vagrant_provision" ]; then
+	   exit 0
+    fi
+}
+
+function log_fn() {
+    String=$1
+    echo $String >> $LOGFILE
+}
+
+function add_basic_apps_fn() {
+
+    log_fn "Adding basic apps"
+
+    sed -i 's/#deb/deb/g' /etc/apt/sources.list 
+    sed -i 's/deb cdrom/# deb cdrom/g' /etc/apt/sources.list
+    apt-get -y update >> $LOGFILE
+    apt-get -y install emacs24 ntp git-core lynx-cur dbus-x11 sudo apt-get gnome-icon-theme >> $LOGFILE
+}
+
+function install_erlang_fn() {
+    echo "getting and building erlang" >> $LOGFILE
+
+    apt-get -y build-dep erlang >> $LOGFILE
+    apt-get -y install libwxbase2.8 libwxgtk2.8-dev libqt4-opengl-dev libgtk2.0-dev >> $LOGFILE
+    mkdir -p /tmp/build-erlang
+    cd $_
+    wget --tries=10 $ERLANG_URL -O erlang.tar.gz >> $LOGFILE
+    tar xfz erlang.tar.gz
+    cd `ls -l | egrep '^d' | tr -s ' ' | cut -d' ' -f9`
+    echo "configure erlang" >> $LOGFILE
+    ./configure >> $LOGFILE
+    echo "make erlang" >> $LOGFILE
+    make >> $LOGFILE
+    echo "install erlang" >> $LOGFILE
+    make install >> $LOGFILE
+}
+
+function install_riak_fn() {
+    echo "install riak" >> $LOGFILE
+    sudo apt-get -y install build-essential libpam0g-dev git >> $LOGFILE
+    mkdir -p /home/vagrant/riak >> $LOGFILE
+    cd $_
+    curl -O $RIAK_URL >> $LOGFILE
+    tar zxvf riak-2.0.2.tar.gz >> $LOGFILE
+    cd riak-2.0.2 >> $LOGFILE
+    sudo make all >> $LOGFILE
+    make devrel DEVNODES=5 >> $LOGFILE
+    sudo chown -R vagrant:vagrant /home/vagrant/riak >> $LOGFILE
+}
+
+function configure_riak_fn() {
+    sudo echo "riak soft nofile 4096" >> /etc/security/limits.conf
+    sudo echo "riak hard nofile 65536" >> /etc/security/limits.conf
+    # sudo echo "ulimit -n 65536" > /etc/default/riak >> $LOGFILE
+}
+
+function configure_vagrant_fn() {
+    echo "# set up X Windows to export to host" > /home/vagrant/.bashrc
+    echo "export DISPLAY=10.0.2.2:0" > /home/vagrant/.bashrc
+
+    touch /var/vagrant_provision
+}
+
+function main {
+    should_provision_fn
+    # add_basic_apps_fn
+    # install_erlang_fn
+    # install_riak_fn
+    configure_riak_fn
+    # configure_vagrant_fn
+    echo "Installation finished" >> $LOGFILE
+}
+
+main
