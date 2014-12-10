@@ -69,7 +69,7 @@ function install_riak_fn() {
 }
 
 function configure_riak_fn() {
-    sudo echo "riak soft nofile 4096" >> /etc/security/limits.conf
+    sudo echo "riak soft nofile 65536" >> /etc/security/limits.conf
     sudo echo "riak hard nofile 65536" >> /etc/security/limits.conf
     # sudo echo "ulimit -n 65536" > /etc/default/riak >> $LOGFILE
 }
@@ -95,11 +95,11 @@ function configure_vagrant_fn() {
 
 function main {
     should_provision_fn
-    # add_basic_apps_fn
-    # install_erlang_fn
-    # install_riak_fn
-    # configure_riak_fn
-    install_riak_docs_fn
+    add_basic_apps_fn
+    install_erlang_fn
+    install_riak_fn
+    configure_riak_fn
+    # install_riak_docs_fn
     # configure_vagrant_fn
     echo "Installation finished" >> $LOGFILE
 }
