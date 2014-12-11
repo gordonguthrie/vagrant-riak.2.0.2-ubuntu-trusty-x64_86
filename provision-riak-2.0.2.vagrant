@@ -89,7 +89,8 @@ function install_riak_docs_fn() {
 function link_shared_files_fn() {
 	ln -s /home/vagrant/vagrant_data/.ssh /home/vagrant/.ssh
 	ln -s /home/vagrant/vagrant_data/.bash_profile /home/vagrant/.bash_profile
-}
+	ln -s /home/vagrant/vagrant_data/.quiviq2 /home/vagrant/.quiviq2
+}	
 
 function configure_vagrant_fn() {
     touch /var/vagrant_provision
