@@ -86,6 +86,11 @@ function install_riak_docs_fn() {
     cd $OLDDir
 }
 
+function link_shared_files_fn() {
+	ln -s /home/vagrant/basho_vagrant/.ssh /home/vagrant/.ssh
+	ln -s /home/vagrant/basho_vagrant/.bash_profile /home/vagrant/.bash_profile
+}
+
 function configure_vagrant_fn() {
     touch /var/vagrant_provision
 }
@@ -97,6 +102,7 @@ function main {
     install_riak_fn
     configure_riak_fn
     install_riak_docs_fn
+    link_shared_files_fn
     configure_vagrant_fn
     echo "Installation finished" >> $LOGFILE
 }
