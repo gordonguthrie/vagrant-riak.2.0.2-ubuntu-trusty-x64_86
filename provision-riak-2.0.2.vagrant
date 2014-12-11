@@ -87,8 +87,8 @@ function install_riak_docs_fn() {
 }
 
 function link_shared_files_fn() {
-	ln -s /home/vagrant/basho_vagrant/.ssh /home/vagrant/.ssh
-	ln -s /home/vagrant/basho_vagrant/.bash_profile /home/vagrant/.bash_profile
+	ln -s /home/vagrant/vagrant_data/.ssh /home/vagrant/.ssh
+	ln -s /home/vagrant/vagrant_data/.bash_profile /home/vagrant/.bash_profile
 }
 
 function configure_vagrant_fn() {
