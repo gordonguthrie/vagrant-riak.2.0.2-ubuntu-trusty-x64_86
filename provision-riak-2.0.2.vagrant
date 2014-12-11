@@ -87,9 +87,6 @@ function install_riak_docs_fn() {
 }
 
 function configure_vagrant_fn() {
-    echo "# set up X Windows to export to host" > /home/vagrant/.bashrc
-    echo "export DISPLAY=10.0.2.2:0" > /home/vagrant/.bashrc
-
     touch /var/vagrant_provision
 }
 
@@ -99,9 +96,10 @@ function main {
     install_erlang_fn
     install_riak_fn
     configure_riak_fn
-    # install_riak_docs_fn
-    # configure_vagrant_fn
+    install_riak_docs_fn
+    configure_vagrant_fn
     echo "Installation finished" >> $LOGFILE
 }
 
 main
+ 
