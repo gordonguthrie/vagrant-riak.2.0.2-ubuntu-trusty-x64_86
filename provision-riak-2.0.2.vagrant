@@ -71,6 +71,8 @@ function install_riak_fn() {
 function configure_riak_fn() {
     sudo echo "riak soft nofile 65536" >> /etc/security/limits.conf
     sudo echo "riak hard nofile 65536" >> /etc/security/limits.conf
+    sudo echo "vagrant soft nofile 65536" >> /etc/security/limits.conf
+    sudo echo "vagrant hard nofile 65536" >> /etc/security/limits.conf
     # sudo echo "ulimit -n 65536" > /etc/default/riak >> $LOGFILE
 }
 
