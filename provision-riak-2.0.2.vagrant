@@ -34,7 +34,7 @@ function add_basic_apps_fn() {
     sed -i 's/#deb/deb/g' /etc/apt/sources.list 
     sed -i 's/deb cdrom/# deb cdrom/g' /etc/apt/sources.list
     sudo apt-get -y update >> $LOGFILE
-    sudo apt-get -y install emacs24 ntp git-core lynx-cur dbus-x11 gnome-icon-theme firefox chromium-browser ssh-askpass >> $LOGFILE
+    sudo apt-get -y install emacs24 ntp git-core lynx-cur dbus-x11 gnome-icon-theme firefox chromium-browser ssh-askpass xclip >> $LOGFILE
 }
 
 function install_erlang_fn() {
