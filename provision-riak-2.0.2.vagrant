@@ -107,7 +107,7 @@ function main {
     should_provision_fn
     add_basic_apps_fn
     install_erlang_fn
-    install_riak_prerequisites_fn,
+    install_riak_prerequisites_fn
     install_riak_fn
     configure_riak_fn
     install_riak_docs_fn
